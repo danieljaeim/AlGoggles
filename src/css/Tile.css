@@ -1,17 +1,26 @@
 .tile-container {
     position: relative;
-    border-radius: 50%;
-    height: 25px;
-    width: 25px;
+    border-radius: 5%;
     border: 1px solid #CFCFEA;
     background-color: whitesmoke;
-    margin: 2px;
+    /* margin: .5px; */
     /* font-size: 10px; */
     text-align: center;
     font-weight: 600;
 }
 
-.tile-lit {
+.END {
+    border: 1px teal solid;
+    background-color: darkcyan;
+}
+
+.START {
+    border: 1px rosybrown solid;
+    background-color: salmon;
+}
+
+.WALL {
+    border: 1px  rgb(12, 53, 71) solid;
     animation: 0.3s expand ease-in forwards alternate;
 }
 

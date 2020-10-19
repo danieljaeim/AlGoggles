@@ -3,8 +3,10 @@
     display: flex;
     flex-wrap: wrap;
     width: 80vw;
+    left: 10vw;
     min-width: 1000px;
     height: 80vh;
+    top: 5vh;
     min-height: 850px;
     align-content: flex-start;
     /* border: 1px black solid; */

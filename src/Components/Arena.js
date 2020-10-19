@@ -1,7 +1,6 @@
 import React from 'react';
 import '../css/Arena.css';
 import Tile from '../Components/Tile';
-import PropTypes from 'prop-types';
 
 class Arena extends React.Component {
     constructor(props) {
@@ -13,19 +12,23 @@ class Arena extends React.Component {
 
     render() {
 
-        let {arena, width, height, updateArenaTile, mouseDown} = this.props;
+        let { arena, width, height, updateArenaTile, mouseDown } = this.props;
 
         return (
             <div className="arena-container">
-                {arena ? arena.map((arr, y) => arr.map((tile, x) => 
-                    <Tile key={x + ',' + y} 
-                          x={x} 
-                          y={y} 
-                          {...tile}
-                          updateArenaTile={updateArenaTile}
-                          mouseDown={mouseDown}
-                    />)) 
-                : null}
+                {arena ? arena.map((arr, y) => arr.map((tile, x) => {
+                    return <Tile 
+                        key={x + ',' + y}
+                        x={x}
+                        y={y}
+                        width={width}
+                        height={height}
+                        type={tile.type}
+                        updateArenaTile={updateArenaTile}
+                        mouseDown={mouseDown}
+                    />
+                }))
+                    : null}
             </div>
         );
     }
