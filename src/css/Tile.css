@@ -30,6 +30,11 @@
         background-color: rgb(12, 53, 71);
     }
 
+    25% {
+        transform: scale(0.9);
+        background-color: rgb(12, 53, 71);
+    }
+
     50% {
         transform: scale(1.2);
         background-color: rgb(12, 53, 71);
@@ -38,5 +43,19 @@
     100% {
         transform: scale(1.0);
         background-color: rgb(12, 53, 71);
+    }
+}
+
+.moving {
+    animation: 1s infinite border-flashing linear alternate;
+}
+
+@keyframes border-flashing {
+    0% {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: black;
     }
 }

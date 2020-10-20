@@ -12,7 +12,7 @@ class Arena extends React.Component {
 
     render() {
 
-        let { arena, width, height, updateArenaTile, mouseDown } = this.props;
+        let { arena, width, height, mouseDown, movingStart, movingEnd, updateSpecial, updateArenaTile } = this.props;
 
         return (
             <div className="arena-container">
@@ -25,7 +25,10 @@ class Arena extends React.Component {
                         height={height}
                         type={tile.type}
                         updateArenaTile={updateArenaTile}
+                        updateSpecial={updateSpecial}
                         mouseDown={mouseDown}
+                        movingStart={movingStart}
+                        movingEnd={movingEnd}
                     />
                 }))
                     : null}
