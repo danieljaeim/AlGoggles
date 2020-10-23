@@ -1,0 +1,25 @@
+.header-container {
+    position: relative;
+    /* border: 1px black solid; */
+    width: 100%;
+    height: 120px;
+}
+
+.btn-begin-algorithm {
+    position: relative;
+    width: 300px;
+    height: 100px;
+    top: 10px;
+    background-color: salmon;
+    left: calc((100% - 300px) / 2);
+    border-radius: 10px;
+    font-size: 35px;
+    text-align: center;
+    line-height: 90px;
+    font-weight: 600;
+}
+
+.btn-begin-algorithm:hover {
+    cursor: pointer;
+    background-color: palevioletred;
+}

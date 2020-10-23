@@ -1,28 +1,34 @@
 import React from 'react';
 import '../css/Tile.css';
+import { calcDistance } from '../data/Algorithms';
+
+const visitDelay = 0.15;
 
 class Tile extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
     render() {
-        let {x, y, lit, width, height, type, mouseDown, movingStart, movingEnd, updateArenaTile, updateSpecial } = this.props;
+        let { x, y, lit, visited, startTile, endStartDistance, endTile, width, height, type, mouseDown, movingStart, movingEnd, updateArenaTile, updateSpecial } = this.props;
 
-        let onClickFunc = () => updateSpecial(x, y, type);
-        let onMouseDownFunc = movingStart || movingEnd ? () => {return null} : () => updateArenaTile(x, y, type);
-        let onMouseOverFunc = !mouseDown || movingStart || movingEnd ? () => {return null} : () => updateArenaTile(x, y);
+        // let endDist = calcDistance(endTile.x, x, endTile.y, y);
+        let startDist = calcDistance(startTile.x, x, startTile.y, y);
 
-        let movingState = (type == "START" && movingStart) || (type == "END" && movingEnd) ? ' moving' : '';
+        let movingState = (type === "START" && movingStart) || (type === "END" && movingEnd) ? ' moving forwards' : '';
+        let litState = lit && !(type === "END" || type === "START");
+        let visitState = visited && !(type === "END" || type === "START");
+
+        let delay = startDist;
+        let litAnimation = litState ? `.1s light-up linear ${delay * .1 + visitDelay * endStartDistance}s forwards running, ` : '';
+        let visitAnimation = visitState ? `1s visited linear ${delay * visitDelay}s forwards` : '';
+        // keep this as ${endStartDistance * delay * visitDelay} for some cool effects
 
         return (
-            <div className={type + ' tile-container' + movingState + (lit ? ' tile-lit' : '')}
-                style={{ width: `calc((80vw - ${width * 2}px) / ${width})`, height: `calc((80vh - ${height * 2}px) / ${height})`}} 
-                onClick={_ => onClickFunc()}
-                onMouseDown={_ => onMouseDownFunc()}
-                onMouseOver={_ => onMouseOverFunc()}>
-            </div>
+            <div className={type + ' tile-container ' + movingState + x + ' ' + y}
+                style={{
+                    animation: litAnimation + visitAnimation,
+                    animationDelay: delay
+                }}
+                onClick={_ => updateSpecial(x, y, type)}
+                // onMouseDown={_ => updateArenaTile(x, y, type)} />
+                onMouseOver={_ => updateArenaTile(x, y, type)} />
         );
     }
 }
@@ -30,3 +36,5 @@ class Tile extends React.Component {
 Tile.propTypes = {};
 
 export default Tile;
+
+

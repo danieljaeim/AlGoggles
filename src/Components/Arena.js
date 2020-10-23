@@ -3,26 +3,28 @@ import '../css/Arena.css';
 import Tile from '../Components/Tile';
 
 class Arena extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
     render() {
 
-        let { arena, width, height, mouseDown, movingStart, movingEnd, updateSpecial, updateArenaTile } = this.props;
+        let { arena, width, height, mouseDown, 
+            movingStart, movingEnd, updateSpecial, 
+            updateArenaTile, startTile, endTile, 
+            endStartDistance, startedAlgorithm } = this.props;
 
         return (
-            <div className="arena-container">
+            <div className="arena-container"
+                style={{ gridTemplateRows: `repeat(${height}, 1fr)`, gridTemplateColumns: `repeat(${width}, 1fr)` }}>
                 {arena ? arena.map((arr, y) => arr.map((tile, x) => {
-                    return <Tile 
+                    return <Tile
                         key={x + ',' + y}
                         x={x}
                         y={y}
                         width={width}
                         height={height}
+                        endStartDistance={endStartDistance}
+                        startTile={startTile}
+                        endTile={endTile}
+                        lit={tile.lit}
+                        visited={tile.avisited}
                         type={tile.type}
                         updateArenaTile={updateArenaTile}
                         updateSpecial={updateSpecial}
