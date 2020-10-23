@@ -23,6 +23,7 @@ class Arena extends React.Component {
                         endStartDistance={endStartDistance}
                         startTile={startTile}
                         endTile={endTile}
+                        distance={tile.distance}
                         lit={tile.lit}
                         visited={tile.avisited}
                         type={tile.type}

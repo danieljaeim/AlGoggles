@@ -11,7 +11,7 @@ export default class PriorityQueue {
             return;
         }
 
-        if (this.items[this.items.length - 1].priority < qNode.priority) {
+        if (this.items[this.items.length - 1].priority <= qNode.priority) {
             this.items.push(qNode);
             return;
         }

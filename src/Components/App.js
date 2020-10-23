@@ -166,29 +166,21 @@ class App extends React.Component {
 
     while (!pq.isEmpty()) {
       let curNode = pq.dequeue().elem;
-      let curDistance = curNode.distance;
+
+      if (curNode.y === endTile.y && curNode.x === endTile.x) break;
+
+      let curDistance = distances[curNode.y + ' ' + curNode.x];
       curNode.adjacent.forEach(neighbor => {
-        if (neighbor.type === "WALL") return;
-        neighbor.avisited = true;
-        let neighborDistance = Math.sqrt(Math.pow(endTile.y - neighbor.y, 2) + Math.pow(endTile.x - neighbor.x, 2))
-        let alt = (curDistance + neighborDistance);
-        let key = neighbor.y + ' ' + neighbor.x;
-        if (alt < distances[key]) {
-          distances[key] = alt;
-          trace[key] = curNode.y + ' ' + curNode.x;
-          pq.enqueue(neighbor, alt);
-          if (alt > highestDistance) {
-            highestDistance = alt;
-            furthestNode = neighbor;
+        if (neighbor.type == "WALL") return;
+        if (!neighbor.avisited) {
+          neighbor.avisited = true;
+          let alt = curDistance + 1;
+          if (alt < distances[neighbor.y + ' ' + neighbor.x]) {
+            distances[neighbor.y + ' ' + neighbor.x] = curDistance + 1;
+            trace[neighbor.y + ' ' + neighbor.x] = curNode.y + ' ' + curNode.x;
+            pq.enqueue(neighbor, curDistance + 1)
           }
-          
         }
-
-        if (neighbor.y == endTile.y && neighbor.x == endTile.x) {
-          console.log('found end at', neighbor.x + ' ' + neighbor.y)
-          foundEnd = true;
-        }
-
       });
     }
 
@@ -203,7 +195,7 @@ class App extends React.Component {
       lastStep = trace[lastStep];
     }
 
-    console.log(path.length, highestDistance, furthestNode)
+    console.log('path:', path, 'highestDist:', highestDistance, 'furthestNode: ',furthestNode)
 
     this.setState({ endStartDistance: path.length - 1 })
 
