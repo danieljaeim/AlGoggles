@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/Tile.css';
 import { calcDistance } from '../data/Algorithms';
 
-const visitDelay = 0.3;
+const visitDelay = 0.1;
 
 class Tile extends React.Component {
     render() {
@@ -16,8 +16,8 @@ class Tile extends React.Component {
         let visitState = visited && !(type === "END" || type === "START") && distance <= endStartDistance;
 
         let delay = startDist;
-        let litAnimation = litState ? `.1s light-up linear ${delay * .1 + visitDelay * endStartDistance}s forwards running, ` : '';
-        let visitAnimation = visitState ? `1.5s visited linear ${delay * visitDelay}s` : '';
+        let litAnimation = litState ? `.1s light-up linear ${distance * .001 + visitDelay * distance}s forwards running, ` : '';
+        let visitAnimation = visitState ? `1.5s visited linear ${distance * visitDelay}s` : '';
         // keep this as ${endStartDistance * delay * visitDelay} for some cool effects
 
         return (

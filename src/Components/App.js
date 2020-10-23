@@ -178,6 +178,7 @@ class App extends React.Component {
           if (alt < distances[neighbor.y + ' ' + neighbor.x]) {
             distances[neighbor.y + ' ' + neighbor.x] = curDistance + 1;
             trace[neighbor.y + ' ' + neighbor.x] = curNode.y + ' ' + curNode.x;
+            neighbor.distance = alt;
             pq.enqueue(neighbor, curDistance + 1)
           }
         }
