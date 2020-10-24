@@ -1,25 +1,76 @@
 .header-container {
     position: relative;
-    /* border: 1px black solid; */
+    display: flex;
     width: 100%;
-    height: 120px;
+    height: 100px;
+    background-color: #0f3460;
+}
+
+.algorithm-form {
+    position: relative;
+    left: calc((100% - 200px) * 4 / 10);
+    top: 30px;
+    border: none;
+}
+
+#algorithm-label {
+    color: white;
+}
+
+.algorithm-opt-container {
+    position: absolute;
+    top: 50px;
+    border: 1px white solid;
+    z-index: 2;
+}
+
+.algorithm-opt {
+    padding: 20px 10px;
+    border: 1px white solid;
+}
+
+.algorithm-opt:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#algorithms {
+    position: absolute;
+    left: 30px;
+    top: 10px;
+    width: 150px;
+    height: 45px;
+    font-size: 25px;
+    text-decoration: none;
+    border: none;
+    color: white;
+    background-color: #0f3460;
+    text-transform: capitalize;
+}
+
+.algorithm-dropdown {
+    height: 40px;
+    left: 450px;
+    top: 35px;
 }
 
 .btn-begin-algorithm {
     position: relative;
     width: 300px;
-    height: 100px;
-    top: 10px;
-    background-color: salmon;
-    left: calc((100% - 300px) / 2);
-    border-radius: 10px;
-    font-size: 35px;
+    height: 64px;
+    top: 20px;
+    color: whitesmoke;
+    background-color: #e94560;
+    left: calc((100% - 300px) * 4 / 10);
+    border-radius: 2%;
+    font-size: 18px;
     text-align: center;
-    line-height: 90px;
+    line-height: 64px;
     font-weight: 600;
 }
 
 .btn-begin-algorithm:hover {
     cursor: pointer;
-    background-color: palevioletred;
+    background-color: #e94560;
+    color: #0f3460;
 }

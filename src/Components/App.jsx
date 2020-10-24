@@ -11,7 +11,7 @@ import PriorityQueue from '../data/PriorityQueue';
 const width = 70; //make this 2x height
 const height = 35;
 const START_TILE = { x: Math.floor(width / 4), y: Math.floor(height / 2) };
-const END_TILE = { x: Math.floor(width * 3 / 4 ), y: Math.floor(height / 2) };
+const END_TILE = { x: Math.floor(width * 3 / 4), y: Math.floor(height / 2) };
 
 class App extends React.Component {
 
@@ -25,7 +25,8 @@ class App extends React.Component {
     currentAlgorithm: 'DIJKSTRAS', // add an early termination version and a populate weights version
     startedAlgorithm: false,
     foundEnd: false,
-    endStartDistance: Infinity
+    endStartDistance: Infinity,
+    neededSteps: 0
   };
 
   componentDidMount = () => {
@@ -67,6 +68,10 @@ class App extends React.Component {
     });
   }
 
+  updateAlgorithm = (algorithm) => {
+    this.setState({ currentAlgorithm: algorithm })
+  }
+
   //optimize this so it iterates through all in chunks
   updateArenaTile = (x, y, type) => {
     let { arenaArr, mouseDown, movingStart, movingEnd, startTile, endTile } = this.state;
@@ -106,7 +111,7 @@ class App extends React.Component {
     }
   }
 
-  resetAlgorithm = async () => {
+  resetAlgorithm = () => {
 
     let { arenaArr } = this.state;
 
@@ -116,8 +121,6 @@ class App extends React.Component {
     }));
 
     this.setState({ startedAlgorithm: false })
-
-    // this.beginAlgorithm();
   }
 
   beginAlgorithm = () => {
@@ -126,18 +129,21 @@ class App extends React.Component {
 
     this.setState({ startedAlgorithm: true });
 
-    this.forceUpdate()
-
     switch (currentAlgorithm) {
       case "DIJKSTRAS":
+        console.log('calling djik')
         this.beginDijkstra();
+        break;
+      case "ASTAR":
+        this.beginAStar();
+        console.log('calling astar')
         break;
       default:
         return;
     }
   }
 
-  beginDijkstra = async () => {
+  beginDijkstra = () => {
     let { arenaArr, startTile, endTile } = this.state;
 
     let distances = {};
@@ -149,7 +155,6 @@ class App extends React.Component {
         let tileKey = tile.y + ' ' + tile.x;
         tile.lit = false;
         distances[tileKey] = Infinity;
-        trace[tileKey] = null;
       }
     }));
 
@@ -158,16 +163,18 @@ class App extends React.Component {
     distances[startTile.y + ' ' + startTile.x] = 0;
 
     pq.enqueue(startTile, 0);
-    let highestDistance = 0;
-    let furthestNode;
 
     // let foundEnd = false; adding this foundEnd condition makes the graph look a lot less interesting :P
     let foundEnd = false;
 
+    let curStep = 0;
     while (!pq.isEmpty()) {
       let curNode = pq.dequeue().elem;
 
-      if (curNode.y === endTile.y && curNode.x === endTile.x) break;
+      if (curNode.y === endTile.y && curNode.x === endTile.x) {
+        this.setState({ neededSteps: curStep });
+        break;
+      }
 
       let curDistance = distances[curNode.y + ' ' + curNode.x];
       curNode.adjacent.forEach(neighbor => {
@@ -178,7 +185,8 @@ class App extends React.Component {
           if (alt < distances[neighbor.y + ' ' + neighbor.x]) {
             distances[neighbor.y + ' ' + neighbor.x] = curDistance + 1;
             trace[neighbor.y + ' ' + neighbor.x] = curNode.y + ' ' + curNode.x;
-            neighbor.distance = alt;
+            neighbor.distance = curStep;
+            curStep++;
             pq.enqueue(neighbor, curDistance + 1)
           }
         }
@@ -196,18 +204,81 @@ class App extends React.Component {
       lastStep = trace[lastStep];
     }
 
-    console.log('path:', path, 'highestDist:', highestDistance, 'furthestNode: ',furthestNode)
-
     this.setState({ endStartDistance: path.length - 1 })
 
     path = path.reverse();
     return this.triggerVisualizePath(path);
   }
 
+  beginAStar = async () => {
+    let { arenaArr, startTile, endTile } = this.state;
+
+    let trace = {};
+    let pq = new PriorityQueue();
+
+    arenaArr.forEach(arr => arr.forEach(tile => {
+      if (tile !== startTile) {
+        tile.lit = false;
+        tile.f = 0;
+        tile.g = 0;
+        tile.h = 0;
+        tile.closed = false;
+      }
+    }));
+
+    trace[startTile.y + ' ' + startTile.x] = 0;
+    pq.enqueue(startTile, 0);
+    startTile.avisited = true;
+    let curStep = 0;
+
+    while (!pq.isEmpty()) {
+      let curNode = pq.dequeue().elem;
+      curNode.closed = true;
+      let curG = curNode.g;
+
+      if (curNode.y === endTile.y && curNode.x === endTile.x) {
+          this.setState({ neededSteps: curStep });
+          break;
+      }
+
+      curNode.adjacent.forEach(neighbor => {
+        if (neighbor.type === "WALL" || neighbor.closed) return;
+        let gScore = curG + 1;
+        let wasVisited = neighbor.avisited;
+        if (!wasVisited || gScore < neighbor.g) {
+          neighbor.avisited = true;
+          trace[neighbor.y + ' ' + neighbor.x] = curNode.y + ' ' + curNode.x;
+          neighbor.h = Math.abs(endTile.y - neighbor.y) + Math.abs(endTile.x - neighbor.x);
+          neighbor.g = gScore;
+          neighbor.f = neighbor.g + neighbor.h;
+          neighbor.distance = curStep;
+          curStep++;
+          pq.enqueue(neighbor, neighbor.f);
+        }
+      })
+    }
+
+    let endKey = endTile.y + ' ' + endTile.x;
+    let startKey = startTile.y + ' ' + startTile.x;
+
+    let path = [];
+    let lastStep = endKey;
+
+    while (lastStep !== startKey) {
+      path.push(lastStep);
+      lastStep = trace[lastStep];
+    }
+
+    console.log(path)
+
+    this.triggerVisualizePath(path);
+  }
+
   triggerVisualizePath = (path) => {
-    path.pop();
+    // path.pop();
     let { arenaArr } = this.state;
-    for (let str of path) {
+    for (let i = 0; i < path.length; i++) {
+      let str = path[i];
       let tStr = str.split(' ');
       arenaArr[tStr[0]][tStr[1]].lit = true;
     }
@@ -215,13 +286,17 @@ class App extends React.Component {
 
   render() {
 
-    const { arenaArr, mouseDown, movingStart, movingEnd, startTile, endTile, endStartDistance, startedAlgorithm } = this.state;
+    const { arenaArr, mouseDown, movingStart, movingEnd, startTile, neededSteps, endTile, updateAlgorithm, currentAlgorithm, endStartDistance, startedAlgorithm } = this.state;
 
     return (
       <div onMouseDown={_ => this.setState({ mouseDown: true })}
         onMouseUp={_ => this.setState({ mouseDown: false })}>
-        <Header beginAlgorithm={this.beginAlgorithm} resetAlgorithm={this.resetAlgorithm} startedAlgorithm={startedAlgorithm} />
-        <Arena 
+        <Header beginAlgorithm={this.beginAlgorithm}
+          resetAlgorithm={this.resetAlgorithm}
+          startedAlgorithm={startedAlgorithm}
+          currentAlgorithm={currentAlgorithm}
+          updateAlgorithm={this.updateAlgorithm} />
+        <Arena
           startedAlgorithm={startedAlgorithm}
           arena={arenaArr}
           startTile={startTile}
@@ -234,6 +309,7 @@ class App extends React.Component {
           movingStart={movingStart}
           movingEnd={movingEnd}
           endStartDistance={endStartDistance}
+          neededSteps={neededSteps}
         />
       </div>
     );
@@ -250,7 +326,10 @@ class Tile {
     this.adjacent = [];
     this.type = type;
     this.lit = false;
-    this.sorted = false;
+    this.f = 0;
+    this.g = 0;
+    this.h = 0;
+    this.closed = false;
   }
 
   type() {
