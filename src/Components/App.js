@@ -8,8 +8,8 @@ import PriorityQueue from '../data/PriorityQueue';
 
 // import algorithms from '../data/Algorithms';
 
-const width = 70; //make this 2x height
-const height = 35;
+const width = 60; //make this 2x height
+const height = 30;
 const START_TILE = { x: Math.floor(width / 4), y: Math.floor(height / 2) };
 const END_TILE = { x: Math.floor(width * 3 / 4), y: Math.floor(height / 2) };
 
@@ -270,7 +270,7 @@ class App extends React.Component {
       path.push(lastStep);
       lastStep = trace[lastStep];
     }
-    
+
     this.triggerVisualizePath(path);
   }
 
