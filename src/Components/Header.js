@@ -22,7 +22,7 @@ class Header extends React.Component {
                         {currentAlgorithm}
                         {this.state.dropDown ?
                             <div className="algorithm-opt-container">
-                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('DJIKSTRAS')} > Djikstras </div>
+                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('DIJKSTRAS')} > Dijkstras </div>
                                 <div className="algorithm-opt" onClick={_ => updateAlgorithm('ASTAR')} > AStar </div>
                             </div> : null}
                     </div>

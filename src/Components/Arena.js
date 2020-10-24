@@ -6,7 +6,7 @@ class Arena extends React.Component {
     render() {
 
         let { arena, width, height, mouseDown, 
-            movingStart, movingEnd, updateSpecial, 
+            movingStart, movingEnd, updateSpecial, handleMouseUp,
             updateArenaTile, startTile, endTile, 
             endStartDistance, startedAlgorithm, neededSteps } = this.props;
 
@@ -27,6 +27,7 @@ class Arena extends React.Component {
                         lit={tile.lit}
                         visited={tile.avisited}
                         type={tile.type}
+                        handleMouseUp={handleMouseUp}
                         updateArenaTile={updateArenaTile}
                         updateSpecial={updateSpecial}
                         mouseDown={mouseDown}

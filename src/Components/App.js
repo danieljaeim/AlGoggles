@@ -1,6 +1,6 @@
 import React from 'react';
-import Arena from '../Components/Arena';
-import Header from '../Components/Header';
+import Arena from './Arena';
+import Header from './Header';
 
 import { calcDistance } from '../data/Algorithms';
 
@@ -72,6 +72,10 @@ class App extends React.Component {
     this.setState({ currentAlgorithm: algorithm })
   }
 
+  handleMouseUp = () => {
+    this.setState({ mouseDown: false })
+  }
+
   //optimize this so it iterates through all in chunks
   updateArenaTile = (x, y, type) => {
     let { arenaArr, mouseDown, movingStart, movingEnd, startTile, endTile } = this.state;
@@ -131,12 +135,10 @@ class App extends React.Component {
 
     switch (currentAlgorithm) {
       case "DIJKSTRAS":
-        console.log('calling djik')
         this.beginDijkstra();
         break;
       case "ASTAR":
         this.beginAStar();
-        console.log('calling astar')
         break;
       default:
         return;
@@ -268,9 +270,7 @@ class App extends React.Component {
       path.push(lastStep);
       lastStep = trace[lastStep];
     }
-
-    console.log(path)
-
+    
     this.triggerVisualizePath(path);
   }
 
@@ -304,6 +304,7 @@ class App extends React.Component {
           width={width}
           height={height}
           mouseDown={mouseDown}
+          handleMouseUp={this.handleMouseUp}
           updateArenaTile={this.updateArenaTile}
           updateSpecial={this.updateSpecial}
           movingStart={movingStart}
