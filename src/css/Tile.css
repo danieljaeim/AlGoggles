@@ -13,11 +13,12 @@
 
 @keyframes light-up {
     0% {
+        transform: scale(0.1);
         background-color: black;
         border: 2px solid whitesmoke;
     }
     100% {
-        border: 2px solid #A3C4BC;
+        border: 2px solid whitesmoke;
         background-color: #F0C808;
     }
 }
@@ -104,6 +105,6 @@
 
     100% {
         transform: scale(1);
-        background-color: #609CE6;
+        opacity: 0.9;
     }
 }

@@ -12,7 +12,7 @@ class Tile extends React.Component {
         let visitState = visited && !(type === "END" || type === "START");
 
         let litAnimation = litState ? `.1s light-up linear ${distance * 0.001 + neededSteps * 0.0035}s forwards, ` : '';
-        let visitAnimation = visitState ? `1.5s visited linear ${distance * 3 * visitDelay}s` : '';
+        let visitAnimation = visitState ? `1.5s visited linear ${distance * 3 * visitDelay}s forwards` : '';
         // keep this as ${endStartDistance * delay * visitDelay} for some cool effects
 
         return (
