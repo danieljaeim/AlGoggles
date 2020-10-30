@@ -74,6 +74,7 @@
 .visited {
     background-color: whitesmoke;
     animation: 1s visited linear; 
+    padding: 5px;
     /* will-change: transform, border-color, background-color; */
 }
 

@@ -11,6 +11,7 @@ class Header extends React.Component {
     render() {
         let { beginAlgorithm, resetAlgorithm, startedAlgorithm, currentAlgorithm, updateAlgorithm } = this.props;
         let { dropDown } = this.state;
+        let maze = currentAlgorithm == "ELLER" || currentAlgorithm == "DFSMAZE";
 
         return (
             <div className="header-container">
@@ -24,6 +25,10 @@ class Header extends React.Component {
                             <div className="algorithm-opt-container">
                                 <div className="algorithm-opt" onClick={_ => updateAlgorithm('DIJKSTRAS')} > Dijkstras </div>
                                 <div className="algorithm-opt" onClick={_ => updateAlgorithm('ASTAR')} > AStar </div>
+                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('DFS')} > Depth First Search </div>
+                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('BFS')} > Breadth First Search Maze </div>
+                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('ELLER')} > Eller's Maze </div>
+                                <div className="algorithm-opt" onClick={_ => updateAlgorithm('DFSMAZE')} > Depth First Search Maze </div>
                             </div> : null}
                     </div>
                 </div>
